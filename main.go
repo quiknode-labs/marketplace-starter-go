@@ -20,5 +20,7 @@ func main() {
   r.PUT("/update", controllers.Update)
   r.DELETE("/deactivate_endpoint", controllers.DeactivateEndpoint)
 
+  r.POST("/rpc", controllers.RPC)
+
   r.Run()
 }

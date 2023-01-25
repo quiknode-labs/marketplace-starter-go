@@ -13,4 +13,5 @@ func init() {
 func main() {
   initializers.DB.AutoMigrate(&models.Account{})
   initializers.DB.AutoMigrate(&models.Endpoint{})
+  initializers.DB.AutoMigrate(&models.RpcRequest{})
 }

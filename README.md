@@ -54,3 +54,9 @@ go get -u github.com/gin-gonic/gin
 go get -u gorm.io/gorm
 go get -u gorm.io/driver/postgres
 ```
+
+
+## TODO
+
+- Make sure it works if JSON RPC request uses an integer in ID
+- Store the Params in the database
