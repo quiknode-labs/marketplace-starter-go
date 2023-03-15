@@ -59,5 +59,5 @@ go get -u gorm.io/driver/postgres
 ## TODO
 
 - Make sure it works if JSON RPC request uses an integer in ID
-- Store the Params in the database
-- Look at the dashboard here for widget ideas: https://dune.com/ilemi/Token-Overview-Metrics
+- Add Basic Auth
+- Add Dashboard with SSO using JWT

@@ -27,6 +27,8 @@ func RPC(c *gin.Context) {
 	network := c.Request.Header.Get("x-qn-network")
 	log.Println("/rpc with", chain, network, quicknodeId, requestBody.Method)
 
+	// TODO: check if quicknodeId, endpoint-id, chain and network are valid
+
 	// Create and store RpcRequest in database
 	rpcRequest := models.RpcRequest{
 		QuicknodeID: quicknodeId,
@@ -46,7 +48,7 @@ func RPC(c *gin.Context) {
 
 	// FILLME: ADD YOUR CODE HERE
 
-	// prepare result to send back
+	// FILLME: prepare result to send back
 	result := gin.H{
 		"quicknode-id": quicknodeId,
 		"chain":        chain,

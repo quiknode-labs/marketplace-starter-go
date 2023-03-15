@@ -56,10 +56,15 @@ func Provision(c *gin.Context) {
 		return
 	}
 
+	scheme := "http://"
+	if c.Request.TLS != nil {
+		scheme = "https://"
+	}
+
 	// Return JSON
 	c.JSON(200, gin.H{
 		"status":        "success",
-		"dashboard-url": "",
+		"dashboard-url": scheme + c.Request.Host + "/dashboard",
 		"access-url":    "",
 	})
 }

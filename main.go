@@ -22,6 +22,8 @@ func main() {
 
 	r.POST("/rpc", controllers.RPC)
 
+	r.GET("/dashboard", controllers.Dashboard)
+
 	r.GET("/healthcheck", controllers.Healthcheck)
 
 	r.Run()
