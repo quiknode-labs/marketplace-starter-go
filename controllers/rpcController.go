@@ -44,7 +44,7 @@ func RPC(c *gin.Context) {
 		return
 	}
 
-	// TODO: DO SOMETHING HERE
+	// FILLME: ADD YOUR CODE HERE
 
 	// prepare result to send back
 	result := gin.H{
