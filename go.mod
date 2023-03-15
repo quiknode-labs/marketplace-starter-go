@@ -1,4 +1,4 @@
-module github.com/quiknode-labs/token-dash
+module github.com/quiknode-labs/qn-go-add-on
 
 go 1.18
 

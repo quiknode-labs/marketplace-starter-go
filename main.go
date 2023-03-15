@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/quiknode-labs/token-dash/controllers"
-	"github.com/quiknode-labs/token-dash/initializers"
+	"github.com/quiknode-labs/qn-go-add-on/controllers"
+	"github.com/quiknode-labs/qn-go-add-on/initializers"
 
 	"github.com/gin-gonic/gin"
 )

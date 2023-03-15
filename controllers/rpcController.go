@@ -4,9 +4,9 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/quiknode-labs/token-dash/initializers"
-	"github.com/quiknode-labs/token-dash/models"
-	rpc "github.com/quiknode-labs/token-dash/types"
+	"github.com/quiknode-labs/qn-go-add-on/initializers"
+	"github.com/quiknode-labs/qn-go-add-on/models"
+	rpc "github.com/quiknode-labs/qn-go-add-on/types"
 )
 
 func RPC(c *gin.Context) {
