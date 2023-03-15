@@ -30,7 +30,12 @@ func Provision(c *gin.Context) {
 	log.Println("/provision with", requestBody)
 
 	// Create an account
-	account := models.Account{QuicknodeID: requestBody.QuicknodeID, Plan: requestBody.Plan}
+	isTest := c.Request.Header.Get("X-QN-TESTING")
+	account := models.Account{
+		QuicknodeID: requestBody.QuicknodeID,
+		Plan:        requestBody.Plan,
+		IsTest:      isTest == "true",
+	}
 	accountResult := initializers.DB.Create(&account)
 	if accountResult.Error != nil {
 		c.JSON(500, gin.H{
@@ -46,6 +51,7 @@ func Provision(c *gin.Context) {
 		HttpUrl:     requestBody.HttpUrl,
 		Chain:       requestBody.Chain,
 		Network:     requestBody.Network,
+		IsTest:      isTest == "true",
 	}
 	endpoint.AccountID = account.ID
 	endpointResult := initializers.DB.Create(&endpoint)
@@ -117,6 +123,8 @@ func Update(c *gin.Context) {
 		})
 		return
 	}
+	isTest := c.Request.Header.Get("X-QN-TESTING")
+	endpoint.IsTest = isTest == "true"
 	endpoint.WssUrl = requestBody.WssUrl
 	endpoint.HttpUrl = requestBody.HttpUrl
 	endpoint.Chain = requestBody.Chain

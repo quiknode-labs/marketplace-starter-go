@@ -1,15 +1,16 @@
 package models
 
-import(
-  "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
 )
 
 type Endpoint struct {
-  gorm.Model
-  AccountID      uint
-  QuicknodeID    string
-  WssUrl         string
-  HttpUrl        string
-  Chain          string
-  Network        string
+	gorm.Model
+	AccountID   uint
+	QuicknodeID string
+	WssUrl      string
+	HttpUrl     string
+	Chain       string
+	Network     string
+	IsTest      bool `gorm:"default:false"`
 }

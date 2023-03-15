@@ -22,6 +22,7 @@ func RPC(c *gin.Context) {
 	}
 
 	// get data of the request header
+	isTest := c.Request.Header.Get("X-QN-TESTING")
 	quicknodeId := c.Request.Header.Get("x-quicknode-id")
 	endpointId := c.Request.Header.Get("x-instance-id")
 	chain := c.Request.Header.Get("x-qn-chain")
@@ -57,6 +58,7 @@ func RPC(c *gin.Context) {
 		RequestID:   requestBody.ID.(string),
 		Method:      requestBody.Method,
 		Version:     requestBody.JsonRpc,
+		IsTest:      isTest == "true",
 	}
 	rpcRequestSaved := initializers.DB.Create(&rpcRequest)
 	if rpcRequestSaved.Error != nil {
