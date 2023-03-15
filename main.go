@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/quiknode-labs/qn-go-add-on/controllers"
@@ -17,6 +18,10 @@ func init() {
 func main() {
 	r := gin.Default()
 
+	r.GET("/", func(c *gin.Context) {
+		c.String(http.StatusOK, "<h1>qn-go-add-on</h1>")
+	})
+
 	authorized := r.Group("/", gin.BasicAuth(gin.Accounts{
 		os.Getenv("BASIC_AUTH_USERNAME"): os.Getenv("BASIC_AUTH_PASSWORD"),
 	}))
@@ -27,6 +32,8 @@ func main() {
 	authorized.DELETE("/deactivate_endpoint", controllers.DeactivateEndpoint)
 
 	r.POST("/rpc", controllers.RPC)
+
+	r.GET("/api", controllers.API)
 
 	r.GET("/dashboard", controllers.Dashboard)
 

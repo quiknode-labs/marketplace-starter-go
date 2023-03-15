@@ -23,11 +23,31 @@ func RPC(c *gin.Context) {
 
 	// get data of the request header
 	quicknodeId := c.Request.Header.Get("x-quicknode-id")
+	endpointId := c.Request.Header.Get("x-instance-id")
 	chain := c.Request.Header.Get("x-qn-chain")
 	network := c.Request.Header.Get("x-qn-network")
 	log.Println("/rpc with", chain, network, quicknodeId, requestBody.Method)
 
 	// TODO: check if quicknodeId, endpoint-id, chain and network are valid
+	// find the account
+	var account models.Account
+	findAccountResult := initializers.DB.Where("quicknode_id = ?", quicknodeId).First(&account)
+	if findAccountResult.Error != nil {
+		c.JSON(404, gin.H{
+			"error": "could not find account",
+		})
+		return
+	}
+
+	// find the endpoint
+	var endpoint models.Endpoint
+	findEndpointResult := initializers.DB.Where("quicknode_id = ? AND chain = ? AND network = ?", endpointId, chain, network).First(&endpoint)
+	if findEndpointResult.Error != nil {
+		c.JSON(404, gin.H{
+			"error": "could not find endpoint",
+		})
+		return
+	}
 
 	// Create and store RpcRequest in database
 	rpcRequest := models.RpcRequest{

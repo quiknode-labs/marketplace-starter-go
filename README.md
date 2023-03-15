@@ -59,6 +59,5 @@ go get -u gorm.io/driver/postgres
 ## TODO
 
 - Make sure it works if JSON RPC request uses an integer in ID
-- Add Basic Auth to provisioning endpoints
 - Add Dashboard with SSO using JWT
 - Finish RPC to validate against DB before responding
