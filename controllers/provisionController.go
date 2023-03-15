@@ -71,7 +71,7 @@ func Provision(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"status":        "success",
 		"dashboard-url": scheme + c.Request.Host + "/dashboard",
-		"access-url":    scheme + c.Request.Host + "/api",
+		"access-url":    scheme + c.Request.Host + "/api", // Note: should be protected by API key
 	})
 }
 

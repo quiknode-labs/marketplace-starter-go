@@ -55,9 +55,42 @@ go get -u gorm.io/gorm
 go get -u gorm.io/driver/postgres
 ```
 
+## Testing with qn-marketplace-cli
+
+You can test using the [qn-marketplace-cli](https://github.com/quiknode-labs/qn-marketplace-cli):
+
+### Testing Provisioning:
+
+```sh
+./qn-marketplace-cli pudd --base-url http://localhost:3010 --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
+```
+
+
+### Testing RPC:
+
+```sh
+./qn-marketplace-cli rpc --url http://localhost:3010/provision --rpc-url http://localhost:3010/rpc --rpc-method qn_test --rpc-params "[\"abc\"]" --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
+```
+
+### Testing Healthcheck:
+
+```sh
+./qn-marketplace-cli healthcheck --url http://localhost:3010/healthcheck
+```
+
+### Testing Single Sign On (SSO):
+
+Below, make sure that the `jwt-secret` matches `QN_SSO_SECRET` in `.env` file.
+
+```
+./qn-marketplace-cli sso --url http://localhost:3010/provision  --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ= --jwt-secret jwt-secret --email jon@example.com --name jon --org QuickNode
+```
 
 ## TODO
 
 - Make sure it works if JSON RPC request uses an integer in ID
-- Add Dashboard with SSO using JWT
-- Implement X-QN-TESTING
+
+
+## LICENSE
+
+MIT
