@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/quiknode-labs/qn-go-add-on/initializers"
+	"github.com/quiknode-labs/marketplace-starter-go/initializers"
 )
 
 func Healthcheck(c *gin.Context) {

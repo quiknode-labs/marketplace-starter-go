@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/quiknode-labs/qn-go-add-on/controllers"
-	"github.com/quiknode-labs/qn-go-add-on/initializers"
+	"github.com/quiknode-labs/marketplace-starter-go/controllers"
+	"github.com/quiknode-labs/marketplace-starter-go/initializers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +19,7 @@ func main() {
 	r := gin.Default()
 
 	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "<h1>qn-go-add-on</h1>")
+		c.String(http.StatusOK, "<h1>marketplace-starter-go</h1>")
 	})
 
 	authorized := r.Group("/", gin.BasicAuth(gin.Accounts{

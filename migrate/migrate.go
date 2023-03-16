@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/quiknode-labs/qn-go-add-on/initializers"
-	"github.com/quiknode-labs/qn-go-add-on/models"
+	"github.com/quiknode-labs/marketplace-starter-go/initializers"
+	"github.com/quiknode-labs/marketplace-starter-go/models"
 )
 
 func init() {

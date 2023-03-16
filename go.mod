@@ -1,4 +1,4 @@
-module github.com/quiknode-labs/qn-go-add-on
+module github.com/quiknode-labs/marketplace-starter-go
 
 go 1.18
 

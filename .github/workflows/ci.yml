@@ -19,7 +19,7 @@ jobs:
           PGPASSWORD: postgres
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: qn_go_add_on
+          POSTGRES_DB: marketplace_starter_go
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -45,7 +45,7 @@ jobs:
         run: |
           cd webapp && cat > .env <<EOL
           PORT=3010
-          DB_URL="host=localhost user=postgres password=postgres dbname=qn_go_add_on port=5432 sslmode=disable"
+          DB_URL="host=localhost user=postgres password=postgres dbname=marketplace_starter_go port=5432 sslmode=disable"
           BASIC_AUTH_USERNAME=username
           BASIC_AUTH_PASSWORD=password
           QN_SSO_SECRET=jwt-secret
@@ -59,7 +59,7 @@ jobs:
 
       - name: Start the web app in the background
         run: |
-          cd webapp && ./qn-go-add-on &
+          cd webapp && ./marketplace-starter-go &
           sleep 3  # Give the web app some time to start
 
       - name: Check out source code for qn-marketplace-cli
