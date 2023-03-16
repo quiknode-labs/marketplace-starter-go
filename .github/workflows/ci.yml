@@ -81,5 +81,5 @@ jobs:
       - name: Test RPC [OPTIONAL - remove from .github/workflows/ci.yml file if your add-on does not have RPC methods]
         run: ./cli/qn-marketplace-cli rpc --url http://localhost:3010/provision --rpc-url http://localhost:3010/rpc --rpc-method qn_test --rpc-params "[\"abc\"]" --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
 
-      - name: Test SSO [OPTIONAL - remove from this yml file if your add-on does not have a dashboard]
+      - name: Test SSO [OPTIONAL - remove from .github/workflows/ci.yml file if your add-on does not have a dashboard]
         run: ./cli/qn-marketplace-cli sso --url http://localhost:3010/provision  --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ= --jwt-secret jwt-secret --email jon@example.com --name jon --org QuickNode
