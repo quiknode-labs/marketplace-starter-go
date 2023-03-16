@@ -45,42 +45,58 @@ go build
 ./marketplace-starter-go
 ```
 
+## Routes
 
-7. You can start making HTTP requests using curl or Postman:
+The application has 4 provisioning routes protected by HTTP Basic Auth:
 
-```
-POST http://localhost:3010/provision
-PUT http://localhost:3010/update
-DELETE http://localhost:3010/deactivate_endpoint
-DELETE http://localhost:3010/deprovision
-```
+- `POST /provision`
+- `PUT /update`
+- `DELETE /deactivate`
+- `DELETE /deprovision`
 
-See the [marketplace guide to provisioning](https://www.quicknode.com/guides/marketplace/how-provisioning-works-for-marketplace-partners) for more info.
+It has a public healthcheck route that returns 200 if the service and the database is up and running:
+
+- `GET /healthcheck`
+
+It has a dashboard that can be accessed using Single Sign On with JSON Web Token (JWT):
+
+- `GET /dashboard?jwt=foobar`
+
+It has an JSON RPC route:
+
+- `POST /rpc`
 
 ## Testing with qn-marketplace-cli
 
-You can test using the [qn-marketplace-cli](https://github.com/quiknode-labs/qn-marketplace-cli):
+You can use the [qn-marketplace-cli](https://github.com/quiknode-labs/qn-marketplace-cli) tool to quickly test your add-on while developing it.
 
-### Testing Provisioning:
+To obtain a basic auth string, you can use Go or your language of choice with your username and password, as such:
+
+```go
+package main
+
+import (
+	"encoding/base64"
+	"fmt"
+)
+
+func main() {
+	data := "username:password"
+	encodedData := base64.StdEncoding.EncodeToString([]byte(data))
+	fmt.Println(encodedData)
+}
+```
+
+For the commands below, the `--basic-auth` flag is the Base64 encoding of `username:password`.
+You need to make sure to replace that with your valid credentials (as defined in your `.env` file).
+
+Provisioning:
 
 ```sh
 ./qn-marketplace-cli pudd --base-url http://localhost:3010 --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
 ```
 
-
-### Testing RPC:
-
-```sh
-./qn-marketplace-cli rpc --url http://localhost:3010/provision --rpc-url http://localhost:3010/rpc --rpc-method qn_test --rpc-params "[\"abc\"]" --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
-```
-
-### Testing Healthcheck:
-
-```sh
-./qn-marketplace-cli healthcheck --url http://localhost:3010/healthcheck
-```
-
-### Testing Single Sign On (SSO):
+SSO:
 
 Below, make sure that the `jwt-secret` matches `QN_SSO_SECRET` in `.env` file.
 
@@ -88,9 +104,17 @@ Below, make sure that the `jwt-secret` matches `QN_SSO_SECRET` in `.env` file.
 ./qn-marketplace-cli sso --url http://localhost:3010/provision  --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ= --jwt-secret jwt-secret --email jon@example.com --name jon --org QuickNode
 ```
 
-## TODO
+RPC:
 
-- Make sure it works if JSON RPC request uses an integer in ID
+```sh
+./qn-marketplace-cli rpc --url http://localhost:3010/provision --rpc-url http://localhost:3010/rpc --rpc-method qn_test --rpc-params "[\"abc\"]" --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
+```
+
+Healthcheck:
+
+```sh
+./qn-marketplace-cli healthcheck --url http://localhost:3010/healthcheck
+```
 
 
 ## LICENSE
