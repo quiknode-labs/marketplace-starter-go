@@ -24,11 +24,18 @@ Now you need to run migrations:
 go run migrate/migrate.go
 ```
 
-Then run CompileDaemon which will monitor changes to your file as you develop and rebuild code as needed:
+Then build the code:
 
 ```bash
-CompileDaemon -command="./marketplace-starter-go"
+go build
 ```
+
+And you can run the executable:
+
+```bash
+./marketplace-starter-go
+```
+
 
 Then you can start making HTTP requests using curl or Postman:
 
@@ -47,8 +54,6 @@ See the [marketplace guide to provisioning](https://www.quicknode.com/guides/mar
 mkdir marketplace-starter-go
 cd marketplace-starter-go
 go mod init
-go get github.com/githubnemo/CompileDaemon
-go install github.com/githubnemo/CompileDaemon
 go get github.com/joho/godotenv
 go get -u github.com/gin-gonic/gin
 go get -u gorm.io/gorm
