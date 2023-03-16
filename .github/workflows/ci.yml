@@ -1,0 +1,85 @@
+name: qn-marketplace-cli tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          PGPASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: qn_go_add_on
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.18
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+
+      - name: Check out source code
+        uses: actions/checkout@v2
+        with:
+          path: webapp
+
+      - name: Get dependencies
+        run: cd webapp && go get -v -t -d ./...
+
+      - name: Create .env file
+        run: |
+          cd webapp && cat > .env <<EOL
+          PORT=3010
+          DB_URL="host=localhost user=postgres password=postgres dbname=qn_go_add_on port=5432 sslmode=disable"
+          BASIC_AUTH_USERNAME=username
+          BASIC_AUTH_PASSWORD=password
+          QN_SSO_SECRET=jwt-secret
+          EOL
+
+      - name: Build
+        run: cd webapp && go build
+
+      - name: Run database migration
+        run: cd webapp && go run migrate/migrate.go
+
+      - name: Start the web app in the background
+        run: |
+          cd webapp && ./qn-go-add-on &
+          sleep 3  # Give the web app some time to start
+
+      - name: Check out source code for qn-marketplace-cli
+        uses: actions/checkout@v2
+        with:
+          repository: quiknode-labs/qn-marketplace-cli
+          ref: main
+          path: cli
+
+      - name: Build qn-marketplace-cli
+        run: cd cli && go build
+
+      - name: Conduct a healthcheck
+        run: ./cli/qn-marketplace-cli healthcheck --url http://localhost:3010/healthcheck
+
+      - name: Conduct a PUDD test
+        run: ./cli/qn-marketplace-cli pudd --base-url http://localhost:3010 --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
+
+      - name: Test RPC
+        run: ./cli/qn-marketplace-cli rpc --url http://localhost:3010/provision --rpc-url http://localhost:3010/rpc --rpc-method qn_test --rpc-params "[\"abc\"]" --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
+
+      - name: Test SSO
+        run: ./cli/qn-marketplace-cli sso --url http://localhost:3010/provision  --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ= --jwt-secret jwt-secret --email jon@example.com --name jon --org QuickNode
