@@ -78,7 +78,7 @@ jobs:
       - name: Conduct a PUDD test [REQUIRED]
         run: ./cli/qn-marketplace-cli pudd --base-url http://localhost:3010 --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
 
-      - name: Test RPC [OPTIONAL - remove from this yml file if your add-on does not have RPC methods]
+      - name: Test RPC [OPTIONAL - remove from .github/workflows/ci.yml file if your add-on does not have RPC methods]
         run: ./cli/qn-marketplace-cli rpc --url http://localhost:3010/provision --rpc-url http://localhost:3010/rpc --rpc-method qn_test --rpc-params "[\"abc\"]" --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
 
       - name: Test SSO [OPTIONAL - remove from this yml file if your add-on does not have a dashboard]
