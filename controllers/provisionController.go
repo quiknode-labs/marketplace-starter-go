@@ -19,6 +19,7 @@ func Provision(c *gin.Context) {
 		Chain       string `json:"chain"`
 		Network     string `json:"network"`
 	}
+	isTest := c.Request.Header.Get("X-QN-TESTING")
 
 	err := c.BindJSON(&requestBody)
 	if err != nil {
@@ -29,19 +30,27 @@ func Provision(c *gin.Context) {
 	}
 	log.Println("/provision with", requestBody)
 
-	// Create an account
-	isTest := c.Request.Header.Get("X-QN-TESTING")
-	account := models.Account{
-		QuicknodeID: requestBody.QuicknodeID,
-		Plan:        requestBody.Plan,
-		IsTest:      isTest == "true",
-	}
-	accountResult := initializers.DB.Create(&account)
-	if accountResult.Error != nil {
-		c.JSON(500, gin.H{
-			"error": "could not create account",
-		})
-		return
+	// find the account
+	var account models.Account
+	findAccountResult := initializers.DB.Where("quicknode_id = ?", requestBody.QuicknodeID).First(&account)
+	if findAccountResult.Error != nil {
+		// Create an account since we did not find one
+		isTest := c.Request.Header.Get("X-QN-TESTING")
+		account := models.Account{
+			QuicknodeID: requestBody.QuicknodeID,
+			Plan:        requestBody.Plan,
+			IsTest:      isTest == "true",
+		}
+		accountResult := initializers.DB.Create(&account)
+		if accountResult.Error != nil {
+			c.JSON(500, gin.H{
+				"error": "could not create account",
+			})
+			return
+		}
+		log.Println(" --> created account", account.ID)
+	} else {
+		log.Println(" --> found account", account.ID)
 	}
 
 	// Create an endpoint
