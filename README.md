@@ -51,7 +51,7 @@ The application has 4 provisioning routes protected by HTTP Basic Auth:
 
 - `POST /provision`
 - `PUT /update`
-- `DELETE /deactivate`
+- `DELETE /deactivate_endpoint`
 - `DELETE /deprovision`
 
 It has a public healthcheck route that returns 200 if the service and the database is up and running:
