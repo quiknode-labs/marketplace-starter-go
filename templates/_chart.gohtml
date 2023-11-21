@@ -1,0 +1,11 @@
+<canvas id="chart" height="400" class="border-rounded rounded-lg border-2 border-grey-200 m-10 w-full"></canvas>
+<script>
+
+  const config = {
+    type: 'bar',
+    data: JSON.parse({{ .ChartDataJSON }}),
+    options: JSON.parse({{ .ChartOptionsJSON }}),
+  };
+
+  const myChart = new Chart(document.getElementById('chart'), config);
+</script>

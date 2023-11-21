@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/quiknode-labs/marketplace-starter-go/initializers"
@@ -36,9 +37,9 @@ func Provision(c *gin.Context) {
 	if findAccountResult.Error != nil {
 		// Create an account since we did not find one
 		isTest := c.Request.Header.Get("X-QN-TESTING")
-		account := models.Account{
+		account = models.Account{
 			QuicknodeID: requestBody.QuicknodeID,
-			Plan:        requestBody.Plan,
+			PlanSlug:    requestBody.Plan,
 			IsTest:      isTest == "true",
 		}
 		accountResult := initializers.DB.Create(&account)
@@ -55,6 +56,7 @@ func Provision(c *gin.Context) {
 
 	// Create an endpoint
 	endpoint := models.Endpoint{
+		AccountID:   account.ID,
 		QuicknodeID: requestBody.EndpointId,
 		WssUrl:      requestBody.WssUrl,
 		HttpUrl:     requestBody.HttpUrl,
@@ -62,7 +64,6 @@ func Provision(c *gin.Context) {
 		Network:     requestBody.Network,
 		IsTest:      isTest == "true",
 	}
-	endpoint.AccountID = account.ID
 	endpointResult := initializers.DB.Create(&endpoint)
 	if endpointResult.Error != nil {
 		c.JSON(500, gin.H{
@@ -79,7 +80,7 @@ func Provision(c *gin.Context) {
 	// Return JSON
 	c.JSON(200, gin.H{
 		"status":        "success",
-		"dashboard-url": scheme + c.Request.Host + "/dashboard",
+		"dashboard-url": scheme + c.Request.Host + "/dash/" + strconv.Itoa(int(account.ID)),
 		"access-url":    scheme + c.Request.Host + "/api", // Note: should be protected by API key
 	})
 }
@@ -114,7 +115,7 @@ func Update(c *gin.Context) {
 		})
 		return
 	}
-	account.Plan = requestBody.Plan
+	account.PlanSlug = requestBody.Plan
 	updateAccountResult := initializers.DB.Save(&account)
 	if updateAccountResult.Error != nil {
 		c.JSON(500, gin.H{

@@ -1,0 +1,46 @@
+<div class="flex justify-start items-end self-stretch flex-grow-0 flex-shrink-0 gap-1 p-4 rounded-bl-lg rounded-br-lg bg-white">
+  <!-- Add previous page link -->
+  {{ if .FirstPage }}
+  {{ else }}
+    <a href="?page={{ .PreviousPage }}"
+      class="flex justify-center items-center flex-grow-0 flex-shrink-0 h-10 overflow-hidden gap-2 px-3 py-2 bg-white rounded-lg border border-[#a2abb4]">
+      <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2.5">
+        <img src="/images/left_arrow.svg" alt="Left Arrow" />
+      </div>
+    </a>
+  {{ end }}
+
+  <!-- Page links -->
+  <div class="flex justify-center items-center flex-grow gap-1" id="pagination">
+    {{ range .Pages }}
+      <a href="?page={{ . }}"
+          class="flex justify-center items-center flex-grow-0 flex-shrink-0 overflow-hidden rounded-md">
+        <div class="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2 px-4 py-2">
+          <p class="flex-grow-0 flex-shrink-0 text-sm font-medium text-left text-[#58626d]">
+            {{ . }}
+          </p>
+        </div>
+      </a>
+    {{ end }}
+  </div>
+
+  {{ if .LastPage }}
+  {{ else }}
+    <a href="?page={{ .NextPage }}"
+        class="flex justify-center items-center flex-grow-0 flex-shrink-0 h-10 overflow-hidden gap-2 px-3 py-2 rounded-lg bg-white border border-[#d3d6dc]"
+        style="box-shadow: 0px 2px 4px 0 rgba(16, 21, 27, 0.05), 0px 1px 3px 0 rgba(16, 21, 27, 0.05);">
+      <div class="flex justify-center items-center flex-grow-0 flex-shrink-0 relative overflow-hidden gap-2.5">
+        <img src="/images/right_arrow.svg" alt="Right Arrow" />
+      </div>
+    </a>
+  {{ end }}
+</div>
+<script>
+  document.querySelectorAll('.ellipsis').forEach(function(ellipsis) {
+    ellipsis.addEventListener('click', function() {
+      var currentPage = parseInt(document.querySelector('.border-[#009fd1]').textContent);
+      var newPage = ellipsis.previousElementSibling ? currentPage - 5 : currentPage + 5;
+      window.location.href = '?page=' + newPage;
+    });
+  });
+</script>

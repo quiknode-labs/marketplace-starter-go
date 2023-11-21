@@ -1,0 +1,27 @@
+{{ template "_header.gohtml" .}}
+<body class="">
+  <div class="flex flex-row">
+    <nav id="desktop-nav" class="flex h-screen bg-gray-100 z-40 relative border-r border-gray-300 w-1/6">
+      {{ template "_nav.gohtml" .}}
+    </nav>
+    <main class="flex flex-col items-start w-full h-screen bg-white overflow-x-scroll">
+      <div class="w-full">
+        <div class="overflow-x-auto m-10">
+          <div class="w-full h-full">
+            <div class="mb-10">
+              {{ if eq (len .RpcRequests) 0 }}
+                <div class="flex flex-col items-center justify-center h-96">
+                  <div class="text-2xl font-bold text-gray-500">No data available</div>
+                  <div class="text-gray-400">No requests have been made yet.</div>
+                </div>
+              {{ else }}
+                {{ template "_rpc_requests_table.gohtml" . }}
+              {{ end }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>

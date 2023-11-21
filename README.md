@@ -60,7 +60,7 @@ It has a public healthcheck route that returns 200 if the service and the databa
 
 It has a dashboard that can be accessed using Single Sign On with JSON Web Token (JWT):
 
-- `GET /dashboard?jwt=foobar`
+- `GET /dash/:id?jwt=foobar`
 
 It has an JSON RPC route:
 
@@ -73,31 +73,33 @@ You can use the [qn-marketplace-cli](https://github.com/quiknode-labs/qn-marketp
 For the commands below, the `--basic-auth` flag is the Base64 encoding of `username:password`.
 You need to make sure to replace that with your valid credentials (as defined in your `.env` file).
 
-Provisioning:
 
-```sh
-../qn-marketplace-cli/qn-marketplace-cli pudd --base-url http://localhost:3010 --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
-```
-
-SSO:
-
-Below, make sure that the `jwt-secret` matches `QN_SSO_SECRET` in `.env` file.
-
-```
-../qn-marketplace-cli/qn-marketplace-cli sso --url http://localhost:3010/provision  --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ= --jwt-secret jwt-secret --email jon@example.com --name jon --org QuickNode
-```
-
-RPC:
-
-```sh
-../qn-marketplace-cli/qn-marketplace-cli rpc --url http://localhost:3010/provision --rpc-url http://localhost:3010/rpc --rpc-method qn_test --rpc-params "[\"abc\"]" --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ=
-```
-
-Healthcheck:
+#### Healthcheck:
 
 ```sh
 ../qn-marketplace-cli/qn-marketplace-cli healthcheck --url http://localhost:3010/healthcheck
 ```
+
+#### Provisioning:
+
+```sh
+../qn-marketplace-cli/qn-marketplace-cli pudd --base-url http://localhost:3010 --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ= --quicknode-id foobar
+```
+
+#### SSO:
+
+Below, make sure that the `jwt-secret` matches `QN_SSO_SECRET` in `.env` file.
+
+```
+../qn-marketplace-cli/qn-marketplace-cli sso --url http://localhost:3010/provision  --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ= --jwt-secret jwt-secret --email jon@example.com --name jon --org QuickNode --quicknode-id foobar
+```
+
+#### RPC:
+
+```sh
+../qn-marketplace-cli/qn-marketplace-cli rpc --url http://localhost:3010/provision --rpc-url http://localhost:3010/rpc --rpc-method qn_test --rpc-params "[\"abc\"]" --basic-auth dXNlcm5hbWU6cGFzc3dvcmQ= --quicknode-id foobar
+```
+
 
 ## Obtaining the Basic Auth String
 

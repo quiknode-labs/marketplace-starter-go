@@ -1,0 +1,74 @@
+<div id="code-block-{{ .ID }}" class="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 gap-8 p-8 bg-gray-100 border-t-0 border-r-0 border-b border-l-0 border-[#d3d6dc] hidden">
+  <div class="flex justify-center items-center self-stretch flex-grow-0 flex-shrink-0 gap-8 items-stretch">
+    {{ if .RequestBody }}
+      <div class="flex flex-col justify-start items-start flex-grow w-1/2 gap-2">
+        <div class="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden gap-px rounded-lg bg-[#d3d6dc] border border-[#d3d6dc]">
+        <div class="flex justify-between items-start self-stretch overflow-hidden gap-2 p-2 bg-[#e9ebee]">
+            <div class="flex justify-start items-start flex-shrink relative gap-2 p-2">
+              <p class="text-sm text-left text-[#8c96a0] flex-shrink-1">
+                Request Body
+              </p>
+            </div>
+            <div
+              class="flex justify-end items-center flex-grow-0 flex-shrink-0 overflow-hidden rounded-md bg-white border border-[#d3d6dc] ml-auto"
+              style="
+                box-shadow: 0px 2px 4px 0 rgba(16, 21, 27, 0.05),
+                  0px 1px 3px 0 rgba(16, 21, 27, 0.05);
+              ">
+              <div id="request-sent-block-copy-{{ .ID }}" class="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2 px-4 py-2 cursor-pointer">
+                <img src="/images/copy.svg" alt="Copy" />
+              </div>
+              <div id="request-sent-block-copy-tooltip-{{ .ID }}" class="hidden absolute -mt-12 px-2 py-1 bg-black text-white text-xs rounded">
+                Copied
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden gap-4 p-4 bg-[#f8f8fa]">
+            <p class="flex-grow-0 flex-shrink-0 text-sm text-left text-[#c2c9d0]">
+              {{ .RequestBody }}
+            </p>
+            <pre id="request-sent-block-copy-clipboard-{{ .ID }}" class="flex-grow-0 flex-shrink-0 text-sm text-left text-[#58626d] whitespace-break-spaces">
+              <code class="block whitespace-pre overflow-x-scroll -mt-5">{{ .RequestBody }}</code>
+            </pre>
+          </div>
+        </div>
+      </div>
+    {{ end }}
+    {{ if .ResponseBody }}
+      <div class="flex flex-col justify-start items-start flex-grow w-1/2 gap-2">
+        <div class="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden gap-px rounded-lg bg-[#d3d6dc] border border-[#d3d6dc]">
+          <div class="flex justify-between items-start self-stretch overflow-hidden gap-2 p-2 bg-[#e9ebee]">
+            <div class="flex justify-start items-start flex-shrink relative gap-2 p-2">
+              <p class="text-sm text-left text-[#8c96a0] flex-shrink-1">
+                Response Body
+              </p>
+            </div>
+            <div
+              class="flex justify-end items-center flex-grow-0 flex-shrink-0 overflow-hidden rounded-md bg-white border border-[#d3d6dc] ml-auto"
+              style="
+                box-shadow: 0px 2px 4px 0 rgba(16, 21, 27, 0.05),
+                  0px 1px 3px 0 rgba(16, 21, 27, 0.05);
+              ">
+              <div id="response-received-block-copy-{{ .ID }}" class="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2 px-4 py-2 cursor-pointer">
+                <img src="/images/copy.svg" alt="Copy" />
+              </div>
+              <div id="response-received-block-copy-tooltip-{{ .ID }}" class="hidden absolute -mt-12 px-2 py-1 bg-black text-white text-xs rounded">
+                Copied
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative overflow-hidden gap-4 p-4 bg-[#f8f8fa] overflow-y-scroll">
+            <p class="flex-grow-0 flex-shrink-0 text-sm text-left text-[#c2c9d0]">
+              {{ .ResponseBody }}
+            </p>
+
+            <pre id="response-received-block-copy-clipboard-{{ .ID }}" class="flex-grow-0 flex-shrink-0 text-sm text-left text-[#58626d] whitespace-break-spaces">
+              <code class="block whitespace-pre overflow-x-scroll -mt-5">{{ .ResponseBody }}</code>
+            </pre>
+          </div>
+        </div>
+      </div>
+    {{ end }}
+  </div>
+</div>
