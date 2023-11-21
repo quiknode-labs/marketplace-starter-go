@@ -1,12 +1,14 @@
 package models
 
 import (
+	"gorm.io/datatypes"
 	"gorm.io/gorm"
 )
 
 type Account struct {
 	gorm.Model
-	QuicknodeID string
-	Plan        string
-	IsTest      bool `gorm:"default:false"`
+	QuicknodeID     string `gorm:"index"`
+	PlanSlug        string
+	DeprovisionedAt datatypes.Time
+	IsTest          bool `gorm:"default:false"`
 }

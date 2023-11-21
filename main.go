@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/quiknode-labs/marketplace-starter-go/controllers"
 	"github.com/quiknode-labs/marketplace-starter-go/initializers"
 
@@ -17,6 +19,15 @@ func init() {
 
 func main() {
 	r := gin.Default()
+
+	// Setup static files and templates
+	r.LoadHTMLGlob("templates/*")
+	r.Static("/images", "./images")
+	r.Static("/js", "./js")
+
+	// Set up session middleware
+	store := cookie.NewStore([]byte("8036e05e78860fbfa87ef3de97d4d899"))
+	r.Use(sessions.Sessions("blockbook_session", store))
 
 	r.GET("/", func(c *gin.Context) {
 		c.String(http.StatusOK, "<h1>marketplace-starter-go</h1>")
@@ -35,7 +46,10 @@ func main() {
 
 	r.GET("/api", controllers.API)
 
-	r.GET("/dashboard", controllers.Dashboard)
+	r.GET("/dash/:id", controllers.Dashboard)
+	r.GET("/dash/:id/requests", controllers.RequestsIndex)
+
+	r.GET("/healthz", controllers.Healthcheck)
 
 	r.GET("/healthcheck", controllers.Healthcheck)
 

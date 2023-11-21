@@ -1,18 +1,20 @@
 package controllers
 
 import (
+	"encoding/json"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/quiknode-labs/marketplace-starter-go/initializers"
 	"github.com/quiknode-labs/marketplace-starter-go/models"
-	rpc "github.com/quiknode-labs/marketplace-starter-go/types"
+	"github.com/quiknode-labs/marketplace-starter-go/types"
 )
 
 func RPC(c *gin.Context) {
 
 	// get data off the request body
-	var requestBody rpc.RpcRequest
+	var requestBody types.RpcRequest
 	err := c.BindJSON(&requestBody)
 	if err != nil {
 		log.Fatal(err)
@@ -29,7 +31,6 @@ func RPC(c *gin.Context) {
 	network := c.Request.Header.Get("x-qn-network")
 	log.Println("/rpc with", chain, network, quicknodeId, requestBody.Method)
 
-	// TODO: check if quicknodeId, endpoint-id, chain and network are valid
 	// find the account
 	var account models.Account
 	findAccountResult := initializers.DB.Where("quicknode_id = ?", quicknodeId).First(&account)
@@ -42,7 +43,7 @@ func RPC(c *gin.Context) {
 
 	// find the endpoint
 	var endpoint models.Endpoint
-	findEndpointResult := initializers.DB.Where("quicknode_id = ? AND chain = ? AND network = ?", endpointId, chain, network).First(&endpoint)
+	findEndpointResult := initializers.DB.Where("account_id = ? AND quicknode_id = ? AND chain = ? AND network = ?", account.ID, endpointId, chain, network).First(&endpoint)
 	if findEndpointResult.Error != nil {
 		c.JSON(404, gin.H{
 			"error": "could not find endpoint",
@@ -50,14 +51,20 @@ func RPC(c *gin.Context) {
 		return
 	}
 
+	requestBodyJsonString, err := json.Marshal(requestBody)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error marshalling JSON"})
+		return
+	}
+
 	// Create and store RpcRequest in database
 	rpcRequest := models.RpcRequest{
-		QuicknodeID: quicknodeId,
+		AccountId:   account.ID,
+		EndpointID:  endpoint.ID,
+		MethodName:  requestBody.Method,
+		RequestBody: string(requestBodyJsonString),
 		Chain:       chain,
 		Network:     network,
-		RequestID:   requestBody.ID.(string),
-		Method:      requestBody.Method,
-		Version:     requestBody.JsonRpc,
 		IsTest:      isTest == "true",
 	}
 	rpcRequestSaved := initializers.DB.Create(&rpcRequest)
@@ -69,6 +76,16 @@ func RPC(c *gin.Context) {
 	}
 
 	// FILLME: ADD YOUR CODE HERE
+	// Make sure you set rpcRequestSaved.ResponseStatus and ResponseBody
+	rpcRequest.ResponseBody = "{\"abc\": 123}"
+	rpcRequest.ResponseStatus = 200
+	rpcRequestSaved = initializers.DB.Save(&rpcRequest)
+	if rpcRequestSaved.Error != nil {
+		c.JSON(500, gin.H{
+			"error": "could not update rpc response body and status",
+		})
+		return
+	}
 
 	// FILLME: prepare result to send back
 	result := gin.H{

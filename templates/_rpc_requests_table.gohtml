@@ -1,0 +1,174 @@
+<div class="flex flex-col justify-start items-start self-stretch flex-grow gap-8 px-10">
+  <div class="flex flex-col justify-center items-start self-stretch flex-grow-0 flex-shrink-0 relative gap-4">
+    <p class="self-stretch flex-grow-0 flex-shrink-0 text-base font-medium text-left text-[#10151b]">
+      RPC Requests ({{ .Count }})
+    </p>
+    <div class="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0 overflow-hidden rounded-lg border border-[#d3d6dc] mb-10">
+      <div class="flex flex-col justify-start items-start self-stretch flex-grow-0 flex-shrink-0">
+        <div class="flex justify-start items-start self-stretch flex-grow-0 flex-shrink-0">
+          <div class="flex flex-col justify-start items-start flex-grow">
+            <div class="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative gap-4 pl-4 pr-8 py-2 bg-gray-100 border-t-0 border-r-0 border-b border-l-0 border-[#c2c9d0]">
+              <p class="flex-grow w-[269.33px] text-sm font-medium text-left text-[#10151b]">
+                Date
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col justify-start items-start flex-grow">
+            <div class="flex justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative gap-2 px-4 py-2 bg-gray-100 border-t-0 border-r-0 border-b border-l-0 border-[#c2c9d0]">
+              <p class="flex-grow-0 flex-shrink-0 text-sm font-medium text-left text-[#10151b]">
+                Chain &#x26; Network
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col justify-start items-start flex-grow">
+            <div class="flex justify-start items-start self-stretch flex-grow-0 flex-shrink-0 relative gap-2 px-4 py-2 bg-gray-100 border-t-0 border-r-0 border-b border-l-0 border-[#c2c9d0]">
+              <p class="flex-grow w-[285.33px] text-sm font-medium text-left text-[#10151b]">
+                Method
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0">
+            <div class="flex justify-start items-start flex-grow-0 flex-shrink-0 relative gap-2 px-4 py-2 bg-gray-100 border-t-0 border-r-0 border-b border-l-0 border-[#c2c9d0]">
+              <p class="flex-grow-0 flex-shrink-0 text-sm font-medium text-left text-[#10151b] w-[160px]">
+                Response status
+              </p>
+            </div>
+          </div>
+
+        </div>
+        {{range $index, $rpc_request := .RpcRequests }}
+          <div id="clickable-elm-{{ $rpc_request.ID }}" class="flex justify-start items-start self-stretch flex-grow-0 flex-shrink-0 bg-white <%= .Paginate ? 'cursor-pointer' : '' %>">
+            <div class="flex flex-col justify-start items-start flex-grow">
+              <div class="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative gap-2 p-4 border-t-0 border-r-0 border-b border-l-0 border-[#d3d6dc]">
+                <p class="flex-grow-0 flex-shrink-0 text-sm font-medium text-left text-[#10151b] w-[269.33px]">
+                  {{ $rpc_request.PrettyCreatedAt }}
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col justify-start items-start flex-grow">
+              <div class="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative gap-2 p-4 border-t-0 border-r-0 border-b border-l-0 border-[#d3d6dc]">
+                <p class="flex-grow-0 flex-shrink-0 text-sm text-left text-[#10151b]">
+                  {{ $rpc_request.Chain }} / {{ $rpc_request.Network }}
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col justify-start items-start flex-grow">
+              <div class="flex justify-start self-stretch flex-grow-0 flex-shrink-0 relative gap-2 p-4 border-t-0 border-r-0 border-b border-l-0 border-[#d3d6dc]">
+                <p class="flex-grow text-sm font-medium text-left text-[#10151b]  w-[285.33px] pl-6">
+                  {{ $rpc_request.MethodName }}
+                </p>
+              </div>
+            </div>
+            <div class="flex flex-col justify-start items-start flex-grow-0 flex-shrink-0">
+              <div class="flex justify-start items-center self-stretch flex-grow-0 flex-shrink-0 relative gap-2 p-4 border-t-0 border-r-0 border-b border-l-0 border-[#d3d6dc]">
+                <div class="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2 rounded-[40px] w-[160px] pl-6">
+                  {{ if $rpc_request.Successful }}
+                    <img src="/images/success_icon.svg" alt="Success" />
+                    <p class="flex-grow-0 flex-shrink-0 text-sm text-left text-[#05815a]">
+                  {{ else }}
+                    <img src="/images/failure_icon.svg" alt="Failure" />
+                    <p class="flex-grow-0 flex-shrink-0 text-sm text-left text-[#8f142a]">
+                  {{ end }}
+                    {{ $rpc_request.ResponseStatus }}
+                  </p>
+                </div>
+                <div id="carot-down-{{ $rpc_request.ID }}">
+                  <img src="/images/carot_down.svg" alt="Down" />
+                </div>
+                <div id="carot-up-{{ $rpc_request.ID }}" class="hidden">
+                  <img src="/images/carot_up.svg" alt="Up" />
+                </div>
+              </div>
+            </div>
+          </div>
+          {{ template "_rpc_request_info.gohtml" $rpc_request }}
+        {{ end }}
+
+        {{ if .Paginate }}
+          {{ template "_rpc_requests_pagination.gohtml" . }}
+        {{ else }}
+          {{ if eq .ActiveTab "dashboard" }}
+            <a href="/dash/{{ .AccountId }}/requests" class="flex justify-start items-end self-stretch flex-grow-0 flex-shrink-0 gap-1 p-4 rounded-bl-lg rounded-br-lg bg-white cursor-pointer">
+                <div class="flex justify-center items-center flex-grow gap-1">
+                  Click here to see all requests
+                  <img src="/images/right_arrow.svg" alt="Right Arrow" />
+                </div>
+            </a>
+          {{ end }}
+        {{ end }}
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+window.onload = function() {
+  let clickableElements = document.querySelectorAll('[id^="clickable-elm-"]');
+
+  clickableElements.forEach(function(element) {
+    element.addEventListener('click', function() {
+        let id = element.id.split('-').pop();
+        let codeBlock = document.getElementById(`code-block-${id}`);
+        let carotUp = document.getElementById(`carot-up-${id}`);
+        let carotDown = document.getElementById(`carot-down-${id}`);
+
+        if (!codeBlock.classList.contains('hidden')) {
+          codeBlock.classList.add('hidden');
+        } else {
+          codeBlock.classList.remove('hidden');
+        }
+
+        if (!carotUp.classList.contains('hidden')) {
+          carotUp.classList.add('hidden');
+        } else {
+          carotUp.classList.remove('hidden');
+        }
+
+        if (!carotDown.classList.contains('hidden')) {
+          carotDown.classList.add('hidden');
+        } else {
+          carotDown.classList.remove('hidden');
+        }
+
+        if (element.classList.contains('bg-gray-100')) {
+          element.classList.add('bg-white');
+          element.classList.remove('bg-gray-100');
+        } else {
+          element.classList.remove('bg-white');
+          element.classList.add('bg-gray-100');
+        }
+    });
+  });
+
+  let copyClickableElements = document.querySelectorAll('[id^="request-sent-block-copy-"]');
+  copyClickableElements.forEach(function(element) {
+    element.addEventListener('click', function() {
+      let id = element.id.split('-').pop();
+      let tooltip = document.getElementById(`request-sent-block-copy-tooltip-${id}`);
+      let requestSentBlockBody = document.getElementById(`request-sent-block-copy-clipboard-${id}`);
+      tooltip.classList.remove('hidden');
+      // Copy text to clipboard
+      navigator.clipboard.writeText(requestSentBlockBody.innerText)
+
+      setTimeout(function() {
+          tooltip.classList.add('hidden');
+      }, 2000); // Hide tooltip after 2 seconds
+    })
+  });
+
+  let copyReceivedClickableElements = document.querySelectorAll('[id^="response-received-block-copy-"]');
+  copyReceivedClickableElements.forEach(function(element) {
+    element.addEventListener('click', function() {
+      let id = element.id.split('-').pop();
+      let tooltip = document.getElementById(`response-received-block-copy-tooltip-${id}`);
+      let requestSentBlockBody = document.getElementById(`response-received-block-copy-clipboard-${id}`);
+      tooltip.classList.remove('hidden');
+      // Copy text to clipboard
+      navigator.clipboard.writeText(requestSentBlockBody.innerText)
+
+      setTimeout(function() {
+          tooltip.classList.add('hidden');
+      }, 2000); // Hide tooltip after 2 seconds
+    })
+  });
+};
+</script>
